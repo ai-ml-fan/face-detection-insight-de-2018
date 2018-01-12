@@ -51,12 +51,29 @@ Kinesis much easier to setup, with built-in support
 ```
 ## Algorithm
 
-Add additional notes about how to deploy this on a live system
+- Set up pipeline to ingest the files. 
+- If files cannot be processed from the original location, create storage on AWS so files can be uploaded to S3 or HDFS cluster.
+- Set up logic to process the files.
+  * Filter out non-video files
+  * Extract metadata information for each video, such as duration of video, YUV components related to brightness and color etc.
+  * Use OpenCV or Amazon Rekognition APIs for Facial Detection.
+- Persist or store video-related information in database.
+- Kafka to detect new videos and consumer to retrieve video data and performing the above process near real-time
+
+## Open Issues( To Be Resolved)
+
+  1.  Initial Data Location
+  2.  Data retrieval mechanism: Will data be available for use for ever or should we transfer the initial 50 TB data.
+  3.  Performance of Facial Detection APIs on different platforms
+      * OpenCV (for Postgres Files)
+      * Amazon Rekognition APIs for Facial Detection (for files on S3) 
+      * Google Cloud Video Intelligence(for Google Cloud Files)
+  4. Determine the APIs that should be provided to access the Face Detection data.
 
 ## References
 
 * [Kafka vs. Kinesis](https://blog.insightdatascience.com/ingestion-comparison-kafka-vs-kinesis-4c7f5193a7cd) - Insight Alumni
-* [Template](https://github.com/PurpleBooth) - **Billie Thompson**
+* [Template](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2) - Billie Thompson
 
 
 ## Authors
