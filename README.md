@@ -24,65 +24,46 @@ Data will be provided either through access to Postgres tables, or http links, o
   4. Provide access APIs to retrieve and possibly updated the persisted data.
   5. Extensions to this project would be to have a streaming algorithm to process videos in real-time.
 
-A step by step series of examples that tell you have to get a development env running
+## Technologies
+  1.  Input Data Storage : Amazon S3, optionally Google Cloud Storage if data is initially provided through Google Cloud.
+  2.  Processing Framework: Spark, possibly using Python/PySpark with OpenCV
+  3.  Facial Detection on different platforms
+      * OpenCV (for Postgres Files)
+      * Amazon Rekognition APIs for Facial Detection (for files on S3) 
+      * Google Cloud Video Intelligence(for Google Cloud Files)
+  3. Meta Data Storage on HDFS/S3 (to decide, based on input sources)
+  5. Kafka to support near real-time processing.
 
-Say what the step will be
+### Break down of technologies
 
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+Spark vs Map/Reduce 
 
 ```
-Give an example
+Spark utilizes in-memory caching and optimized execution for fast performance. 
+Supports general batch processing, streaming analytics, machine learning, graph databases, and ad hoc queries.
+Map/Reduce : Map has to complete and persist before Reduce operations. Not friendly for adhoc queries.
 ```
-
-### And coding style tests
-
-Explain what these tests test and why
+Kafka vs Kinesis
 
 ```
-Give an example
+Kafka requires configuration and setup. Kafka is percieved to achieve a higher throughput than Kinesis. Kafka has low latency as compared to Kinesis. 
+Kinesis much easier to setup, with built-in support
 ```
-
-## Deployment
+## Algorithm
 
 Add additional notes about how to deploy this on a live system
 
-## Built With
+## References
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Kafka vs. Kinesis](https://blog.insightdatascience.com/ingestion-comparison-kafka-vs-kinesis-4c7f5193a7cd) - Insight Alumni
+* [Template](https://github.com/PurpleBooth) - **Billie Thompson**
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Krishnaprabha Chari** 
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+
 
 ## License
 
@@ -90,9 +71,8 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+* https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet : Markdown Cheatsheet
+
 
 
 
