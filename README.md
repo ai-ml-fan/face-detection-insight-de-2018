@@ -49,7 +49,7 @@ Kafka vs Kinesis
 Kafka requires configuration and setup. Kafka is percieved to achieve a higher throughput than Kinesis. Kafka has low latency as compared to Kinesis. 
 Kinesis much easier to setup, with built-in support
 ```
-## Algorithm
+## Proposed Algorithm
 
 - Set up pipeline to ingest the files. 
 - If files cannot be processed from the original location, create storage on AWS so files can be uploaded to S3 or HDFS cluster.
