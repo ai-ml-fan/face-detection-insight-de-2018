@@ -1,43 +1,98 @@
-# Faiss 
+# Face-Detection Insight-DE-2018
 
-Faiss is a library for efficient similarity search and clustering of dense vectors. It contains algorithms that search in sets of vectors of any size, up to ones that possibly do not fit in RAM. It also contains supporting code for evaluation and parameter tuning. Faiss is written in C++ with complete wrappers for Python/numpy. Some of the most useful algorithms are implemented on the GPU. It is developed by [Facebook AI Research](https://research.fb.com/category/facebook-ai-research-fair/).
-
-## Introduction
-
-Faiss contains several methods for similarity search. It assumes that the instances are represented as vectors and are identified by an integer, and that the vectors can be compared with L2 distances or dot products. Vectors that are similar to a query vector are those that have the lowest L2 distance or the highest dot product with the query vector. It also supports cosine similarity, since this is a dot product on normalized vectors.
-
-Most of the methods, like those based on binary vectors and compact quantization codes, solely use a compressed representation of the vectors and do not require to keep the original vectors. This generally comes at the cost of a less precise search but these methods can scale to billions of vectors in main memory on a single server. 
-
-The GPU implementation can accept input from either CPU or GPU memory. On a server with GPUs, the GPU indexes can be used a drop-in replacement for the CPU indexes (e.g., replace `IndexFlatL2` with `GpuIndexFlatL2`) and copies to/from GPU memory are handled automatically.
-
-## Building 
-
-The library is mostly implemented in C++, with optional GPU support provided via CUDA, and an optional Python interface. It compiles with a Makefile. See [INSTALL](INSTALL) for details.
-
-## How Faiss works
-
-Faiss is built around an index type that stores a set of vectors, and provides a function to search in them with L2 and/or dot product vector comparison. Some index types are simple baselines, such as exact search. Most of the available indexing structures correspond to various trade-offs with respect to
-
-- search time
-- search quality
-- memory used per index vector 
-- training time
-- need for external data for unsupervised training
-
-## Full documentation of Faiss
-
-The following are entry points for documentation: 
-
-- the full documentation, including a tutorial can be found in the [wiki page](http://github.com/facebookresearch/faiss/wiki)
-- the [doxygen documentation](http://rawgithub.com/facebookresearch/faiss/master/docs/html/annotated.html) gives per-class information
-- to reproduce results from research papers, refer to the [benchmarks README](benchs/README.md).
+## Facial Recognition at Scale for PEX
 
 
-## Join the Faiss community
+  PEX.com is an internet video analytics company. Pex aims to build the most advanced video & music analytics platform on the Internet.
 
-We monitor the [issues page](http://github.com/facebookresearch/faiss/issues) of the repository. You can report bugs, ask questions, etc.
+## Background
+
+With over 7 billion video/audio files indexed and classified, and over 1 exabyte of data processed, PEX aims to build useful insights to create a meaningful and actionable suite of analytics products. 
+
+For this project, PEX wants to know when and how human faces appear in each video. This data will be used to enhance their dataset for analytics tools.
+
+### Size of Dataset
+
+50 TB of structured video, audio, and social media data, including links to media files, and associated metadata. 
+  
+Data will be provided either through access to Postgres tables, or http links, or access to Google Cloud storage buckets.
+
+### Scope of Project : 
+  1.  Build a scalable pipeline that processes the videos provided and computes video features such as intensities, labels, duration and other relevant metadata.
+  2.  Determine the faces across all the video frames of each video using the appropriate facial detection algorithms.
+  3. Design and define the schema to persist the computed data. 
+  4. Provide access APIs to retrieve and possibly updated the persisted data.
+  5. Extensions to this project would be to have a streaming algorithm to process videos in real-time.
+
+## Technologies
+  1.  Input Data Storage : Amazon S3, optionally Google Cloud Storage if data is initially provided through Google Cloud.
+  2.  Processing Framework: Spark, possibly using Python/PySpark with OpenCV
+  3.  Facial Detection on different platforms
+      * OpenCV (for Postgres Files)
+      * Amazon Rekognition APIs for Facial Detection (for files on S3) 
+      * Google Cloud Video Intelligence(for Google Cloud Files)
+  3. Meta Data Storage on HDFS/S3 (to decide, based on input sources)
+  5. Kafka to support near real-time processing.
+
+### Break down of technologies
+
+Spark vs Map/Reduce 
+
+```
+Spark utilizes in-memory caching and optimized execution for fast performance. 
+Supports general batch processing, streaming analytics, machine learning, graph databases, and ad hoc queries.
+Map/Reduce : Map has to complete and persist before Reduce operations. Not friendly for adhoc queries.
+```
+Kafka vs Kinesis
+
+```
+Kafka requires configuration and setup. Kafka is percieved to achieve a higher throughput than Kinesis. Kafka has low latency as compared to Kinesis. 
+Kinesis much easier to setup, with built-in support
+```
+## Proposed Algorithm
+
+- Set up pipeline to ingest the files. 
+- If files cannot be processed from the original location, create storage on AWS so files can be uploaded to S3 or HDFS cluster.
+- Set up logic to process the files.
+  * Filter out non-video files
+  * Extract metadata information for each video, such as duration of video, YUV components related to brightness and color etc.
+  * Use OpenCV or Amazon Rekognition APIs for Facial Detection.
+- Persist or store video-related information in database.
+- Kafka to detect new videos and consumer to retrieve video data and performing the above process near real-time
+
+## Open Issues( To Be Resolved)
+
+  1.  Initial Data Location
+  2.  Data retrieval mechanism: Will data be available for use for ever or should we transfer the initial 50 TB data.
+  3.  Performance of Facial Detection APIs on different platforms
+      * OpenCV (for Postgres Files)
+      * Amazon Rekognition APIs for Facial Detection (for files on S3) 
+      * Google Cloud Video Intelligence(for Google Cloud Files)
+  4. Determine the APIs that should be provided to access the Face Detection data.
+
+## References
+
+* [Kafka vs. Kinesis](https://blog.insightdatascience.com/ingestion-comparison-kafka-vs-kinesis-4c7f5193a7cd) - Insight Alumni
+* [Template](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2) - Billie Thompson
+
+
+## Authors
+
+* **Krishnaprabha Chari** 
+
+
 
 ## License
 
-Faiss is licenced under CC-by-NC, see the LICENCE file for details. This licence may be relaxed to BSD in the future.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+* https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet : Markdown Cheatsheet
+
+
+
+
+
+
 
